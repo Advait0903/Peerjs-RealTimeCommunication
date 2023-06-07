@@ -14,27 +14,7 @@ const peerServer = ExpressPeerServer(server, {
 });
 
 require('./swagger')(app);
-// const options = {
-//   definition: {
-//     openapi : '3.0.0',
-//     info : {
-//       title: 'NodeJS API for RTC',
-//       version : '1.2.0'
-//     },
 
-//     servers : {
-//       api :'http://localhost:3000/'
-//     }
-//   },
-//   apis :['./server.js']
-// }
-
-// const swaggerSpec = swaggerJSDoc(options)
-// module.exports = (app) => {
-//   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-// }
-
-// Store the inputted data
 let inputData = [];
 
 // Serve static files
