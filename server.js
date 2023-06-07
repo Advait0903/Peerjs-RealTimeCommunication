@@ -13,23 +13,26 @@ const peerServer = ExpressPeerServer(server, {
   debug: true,
 });
 
-const options = {
-  definition: {
-    openapi : '3.0.0',
-    info : {
-      title: 'NodeJS API for RTC',
-      version : '1.2.0'
-    },
+require('./swagger')(app);
+// const options = {
+//   definition: {
+//     openapi : '3.0.0',
+//     info : {
+//       title: 'NodeJS API for RTC',
+//       version : '1.2.0'
+//     },
 
-    servers : {
-      api :'http://localhost:3000/'
-    }
-  },
-  apis :['./server.js']
-}
+//     servers : {
+//       api :'http://localhost:3000/'
+//     }
+//   },
+//   apis :['./server.js']
+// }
 
-const swaggerSpec = swaggerJSDoc(options)
-app.use('/api-docs',swaggerUI.serve,swaggerUI.setup(swaggerSpec))
+// const swaggerSpec = swaggerJSDoc(options)
+// module.exports = (app) => {
+//   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+// }
 
 // Store the inputted data
 let inputData = [];
@@ -37,6 +40,16 @@ let inputData = [];
 // Serve static files
 app.use(express.static('public'));
 
+/**
+ * @swagger
+ * /peerjs/peer.js/: 
+ *  get:
+ *    summary: This API is used to check if PeerJS is working or not.
+ *    description: This API is used to check if PeerJS is working or not.
+ *    responses: 
+ *        200:
+ *            description: To test connection .
+ */
 app.get('/peerjs/peer.js', (req, res) => {
     res.sendFile(path.join(__dirname, 'node_modules', 'peer', 'dist', 'peerjs.js'));
   });
@@ -44,12 +57,33 @@ app.get('/peerjs/peer.js', (req, res) => {
 // Mount Peer.js server at /peerjs
 app.use('/peerjs', peerServer);
 
+/**
+ * @swagger
+ * /zigy1: 
+ *  get:
+ *    summary: This API is used to land on user input page.
+ *    description: This API is used to land on user input page.
+ *    responses: 
+ *        200:
+ *            description: To test connection .
+ */
 // Serve the first page with input fields
 app.get('/api/zigy1', (req, res) => {
   res.sendFile(__dirname + '/public/zigy1.html');
 });
 
 // Serve the second page that displays the real-time data
+
+/**
+ * @swagger
+ * /zigy2: 
+ *  get:
+ *    summary: This API is used to land on display page.
+ *    description: This API is used to land on display page.
+ *    responses: 
+ *        200:
+ *            description: To test connection .
+ */
 app.get('/api/zigy2', (req, res) => {
   res.sendFile(__dirname + '/public/zigy2.html');
 });
