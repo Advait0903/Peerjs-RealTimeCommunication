@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Page 2 - Receiver</title>
+</head>
+<body>
+  <h1>Page 2 - Receiver</h1>
+  <ul id="dataList"></ul>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://unpkg.com/peerjs@1.3.2/dist/peerjs.min.js"></script>
+  <script>
+
+    // Generate a unique ID for this receiver
+    const receiverId = 'g70koy0gf';
+
+   // Create a new Peer connection
+    const peer = new Peer(receiverId, {
+      host: '/',
+      port: 3000,
+      path: '/peerjs',
+    });
+
+    // Event listener for Peer connection open
+    peer.on('open', (id) => {
+      console.log('Receiver ID:', id);
+
+    // Request the stored data from the sender
+    //   fetch('/api/data')
+    //     .then(response => response.json())
+    //     .then(data => {
+    //       // Display the stored data
+    //       const dataList = document.getElementById('dataList');
+    //       data.forEach(item => {
+    //         const listItem = document.createElement('li');
+    //         listItem.textContent = item;
+    //         dataList.appendChild(listItem);
+    //       });
+    //     });
+        
+    });
+
+    // Event listener for Peer connection data
+    peer.on('connection', (connection) => {
+      connection.on('data', (data) => {
+        // Update the displayed data
+        console.log(data)
+        // console.log(typeof(data))
+        console.log(data[0].value)
+        console.log(data.length)
+        // const dataList = document.getElementById('dataList');
+        // const listItem = document.createElement('li');
+        // listItem.textContent = data;
+        // dataList.appendChild(listItem);
+        function updateDataList(data) {
+          console.log('Hi')
+          var dataList = $('#dataList');
+          dataList.empty();
+
+          // data.forEach(function(item) {
+          //   var listItem = $('<li>').text(item.value);
+          //   if (item.isChecked) {
+          //     listItem.addClass('checked');
+          //   }
+          //   dataList.append(listItem);
+          //   console.log(dataList)
+          //   console.log(listItem)
+          // });
+
+          for (var i = 0; i < data.length; i++) {
+            var listItem = $('<li>').text(data[i]);
+            $('#dataList').append(listItem);
+          }
+
+          console.log(dataList)
+          console.log(listItem)
+
+        }
+
+
+            // function updateDataList(data) 
+            // {
+            //   $('#dataList').empty();
+          
+            //   for (var i = 0; i < data.length; i++) {
+            //     var listItem = $('<li>').text(data[i]);
+            //     $('#dataList').append(listItem);
+            //   }
+            //   console.log(listItem)
+            // }
+            
+        // Function to fetch data from the backend and update in real-time
+        function fetchData() {
+          // Make an API call to retrieve data
+          // ...
+
+          
+          // Example data (replace with your own data retrieval logic
+
+            // Add the data to the arra
+          // var data = [];
+            for (i = 0; i < data.length; i++){
+              document.writeln((i+1) + ": " + data[i].value);
+              document.writeln("")
+            }
+              
+
+          // Update the data display in real-time
+          updateDataList(data);
+
+          // Schedule the next data update
+          setTimeout(fetchData, 5000); // Update every 1 second
+        }
+
+        // Start fetching data on page load
+        $(document).ready(function() {
+          fetchData();
+        });
+      });
+    });
+
+  </script>
+</body>
+</html>
