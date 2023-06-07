@@ -1,7 +1,8 @@
 const express = require('express');
 const { ExpressPeerServer } = require('peer');
 const path = require('path');
-
+const swaggerJSDoc = require('swagger-jsdoc');
+const swaggerUI = require('swagger-ui-express');
 const app = express();
 const server = app.listen(3000, () => {
   console.log('Server is running on port 3000');
@@ -11,6 +12,24 @@ const server = app.listen(3000, () => {
 const peerServer = ExpressPeerServer(server, {
   debug: true,
 });
+
+const options = {
+  definition: {
+    openapi : '3.0.0',
+    info : {
+      title: 'NodeJS API for RTC',
+      version : '1.2.0'
+    },
+
+    servers : {
+      api :'http://localhost:3000/'
+    }
+  },
+  apis :['./server.js']
+}
+
+const swaggerSpec = swaggerJSDoc(options)
+app.use('/api-docs',swaggerUI.serve,swaggerUI.setup(swaggerSpec))
 
 // Store the inputted data
 let inputData = [];
@@ -26,12 +45,12 @@ app.get('/peerjs/peer.js', (req, res) => {
 app.use('/peerjs', peerServer);
 
 // Serve the first page with input fields
-app.get('/zigy1', (req, res) => {
+app.get('/api/zigy1', (req, res) => {
   res.sendFile(__dirname + '/public/zigy1.html');
 });
 
 // Serve the second page that displays the real-time data
-app.get('/zigy2', (req, res) => {
+app.get('/api/zigy2', (req, res) => {
   res.sendFile(__dirname + '/public/zigy2.html');
 });
 
